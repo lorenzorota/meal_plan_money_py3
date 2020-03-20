@@ -10,6 +10,7 @@ The purpose of this program is to display how much meal plan money one has on th
 
 1. Make sure that you have *python* version >= 3.7, equipped with *pip*
 2. Install *pipenv* (through your favorite package manager) <sup id="a1">[1](#pipenv)</sup>
+
     macOS:
 
     ``` bash
