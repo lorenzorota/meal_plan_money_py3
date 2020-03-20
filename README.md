@@ -9,7 +9,7 @@ The purpose of this program is to display how much meal plan money one has on th
 ## Setup
 
 1. Make sure that you have *python* version >= 3.7, equipped with *pip*
-2. Install *pipenv* (through your favorite package manager) [^pipenv]
+2. Install *pipenv* (through your favorite package manager) <sup id="a1">[1](#pipenv)</sup>
     macOS:
 
     ``` bash
@@ -53,4 +53,4 @@ The purpose of this program is to display how much meal plan money one has on th
     pipenv run python runner.py
     ```
 
-[^pipenv]: [Link] (https://pipenv-es.readthedocs.io/es/stable/)
+<b id="pipenv">1</b> [Link] (https://pipenv-es.readthedocs.io/es/stable/) [↩](#a1)
