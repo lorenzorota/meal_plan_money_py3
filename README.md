@@ -40,7 +40,7 @@ The purpose of this program is to display how much meal plan money one has on th
 
 ## Usage
 
-1. If you have no registered your QPilot credentials, do so by running the following:
+1. If you have not registered your QPilot credentials, do so by running the following:
 
     ```bash
     $ pipenv run python register.py
