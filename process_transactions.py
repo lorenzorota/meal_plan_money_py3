@@ -2,11 +2,9 @@ import json
 import os
 import pytz
 import re
+from getpass import getpass
 from datetime import datetime
 from connect import QPilot_Connection 
-
-login_name = os.environ['LOGIN_NAME']
-password = os.environ['LOGIN_PASSWORD']
 
 class Transactions_Handler():
     ''' Store and process the transaction log of the user '''
@@ -114,26 +112,37 @@ class Transactions_Handler():
     def latest(self):
         date = self.german_tz.localize(datetime.fromisoformat(self.data_buffer[-1][0]))
         print("----------------------------------------")
-        print("Current meal-plan money: €{0:.2f}".format(self.data_buffer[-1][7]))
+        print("Current meal-plan money: € {0:.2f}".format(self.data_buffer[-1][7]))
         print("Last updated: {}".format(date))
         print("----------------------------------------")
 
+def ask_credentials():
+    login_name = input("Username: ")
+    password = getpass("Password: ")
+    return login_name, password
 
 def main():
+    login_name, password = ask_credentials()
     qpilot_session = QPilot_Connection(login_name, password)
     qpilot_session.login()
+    status = qpilot_session.get_status()
 
-    print("Fetching transactions...")
-    transactions = qpilot_session.get_transactions()
-    #print(transactions.json()[0])
+    if status.json()['loggedIn'] == True:
+        print("Fetching transactions...")
+        transactions = qpilot_session.get_transactions()
+        print("Raw JSON:")
+        print(json.dumps(transactions.json(), indent=2))
 
-    sink = Transactions_Handler(transactions.json())
-    sink.load()
-    sink.compute()
-    for item in sink.data_buffer:
-        print(item)
+        sink = Transactions_Handler(transactions.json())
+        sink.load()
+        sink.compute()
+        print("Processed data:")
+        for item in sink.data_buffer:
+            print(item)
 
-    qpilot_session.logout()
+        qpilot_session.logout()
+    else:
+        print("Could not login.")
 
 if __name__ == '__main__':
     main()

@@ -1,9 +1,7 @@
-import requests 
+import requests
 import json
+from getpass import getpass
 import os
-
-login_name = os.environ['LOGIN_NAME']
-password = os.environ['LOGIN_PASSWORD']
 
 URL = 'https://qpilot.jacobs-university.de:1081/api'
 
@@ -29,7 +27,7 @@ class QPilot_Connection():
             headers = {'Content-Type': 'application/json','X-XSRF-TOKEN': csrf_token}
             result = self.client.post(url=URL + '/session', data=json.dumps(payload), headers=headers) 
         except json.decoder.JSONDecodeError:
-            print("Login error HTTP code: {}".format(result))
+            print("Login error HTTP code: {}".format(result.status_code))
 
     def logout(self):
         ''' Close current session '''
@@ -46,7 +44,7 @@ class QPilot_Connection():
 
             self.client.close()
         except json.decoder.JSONDecodeError:
-            print("Logout error HTTP code: {}".format(result))
+            print("Logout error HTTP code: {}".format(result.status_code))
 
     def get_status(self) -> requests:
         ''' Fetch current login status from api '''
@@ -66,8 +64,13 @@ class QPilot_Connection():
         else:
             return result
 
+def ask_credentials():
+    login_name = input("Username: ")
+    password = getpass("Password: ")
+    return login_name, password
 
 def main():
+    login_name, password = ask_credentials()
     qpilot_session = QPilot_Connection(login_name, password)
     qpilot_session.login()
     

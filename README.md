@@ -8,7 +8,7 @@ The purpose of this program is to display how much meal plan money one has on th
 
 ## Setup
 
-1. Make sure that you have *python* version >= 3.7, equipped with *pip*
+1. Make sure that you have *python* version >= 3.6, equipped with *pip*
 2. Install *pipenv* (through your favorite package manager) <sup id="a1">[1](#pipenv)</sup>
 
     macOS:
@@ -40,18 +40,28 @@ The purpose of this program is to display how much meal plan money one has on th
 
 ## Usage
 
-1. (Linux / macOS) Set up your credentials (of your QPilot user, NOT campusnet) as *environment* variables in the following manner:
+1. If you have no registered your QPilot credentials, do so by running the following:
 
     ```bash
-    unset HISTFILE
-    export LOGIN_NAME=name_here
-    export LOGIN_PASSWORD=password_here
+    $ pipenv run python register.py
+    Enter your jacobs e-mail: [e-mail here]
+    Enter your campus card number: [password here]
     ```
 
-2. The hard work is done, to run the program enter the following:
+    You will receive an e-mail from the QPilot server, which instructs you on how to setup your password
+
+2. To run the program enter the following:
 
     ```bash
-    pipenv run python runner.py
+    $ pipenv run python runner.py
+    Username: [username here]
+    Password: [password here]
+    Fetching transactions...
+    ----------------------------------------
+    Current meal-plan money: € xxx.xx
+    Last updated: xxxx-xx-xx xx:xx:xx+01:00
+    ----------------------------------------
+
     ```
 
 <b id="pipenv">1</b> [Link] (https://pipenv-es.readthedocs.io/es/stable/) [↩](#a1)
