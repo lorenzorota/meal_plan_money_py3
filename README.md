@@ -64,4 +64,22 @@ The purpose of this program is to display how much meal plan money one has on th
 
     ```
 
+3. Incase the displayed balance is incorrect, you can set a fixed offset by running the `[-c]` calibration option:
+
+    ```bash
+    $ pipenv run python runner.py -c
+    Username: [username here]
+    Password: [password here]
+    Calibration factor: [offset here]
+    Fetching transactions...
+    ----------------------------------------
+    Current meal-plan money: € xxx.xx
+    Last updated: xxxx-xx-xx xx:xx:xx+01:00
+    ----------------------------------------
+    ```
+
+    The calibration factor can be reset at any point in time and will remain stored in the `data.json` configuration file.
+
+    > Note: The balance may be computed incorrectly in the event that the user's transaction history does not contain particular transactions (due to a server outage).
+
 <b id="pipenv">1</b> [Link] (https://pipenv-es.readthedocs.io/es/stable/) [↩](#a1)

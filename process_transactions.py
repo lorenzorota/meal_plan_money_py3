@@ -9,7 +9,7 @@ from connect import QPilot_Connection
 class Transactions_Handler():
     ''' Store and process the transaction log of the user '''
 
-    def __init__(self, source: json):
+    def __init__(self, source: json, calibration=0.0):
         ''' Initialize all objects '''
         self.transaction_json = source
 
@@ -25,6 +25,7 @@ class Transactions_Handler():
         '''
         self.data_buffer = [[] for _ in range(len(source))]
         self.german_tz = pytz.timezone("Europe/Berlin")
+        self.calibration = calibration
 
     def is_servery_trxn(self, i: int) -> bool:
         amount = self.data_buffer[i][4]
@@ -108,6 +109,14 @@ class Transactions_Handler():
                     item[7] = 180
             else:
                 item[7] = self.data_buffer[i-1][7]
+
+        # apply calibration factor to the computed balance
+        if self.calibration + self.data_buffer[-1][7] <= 180:
+            self.data_buffer[-1][7] = self.calibration + self.data_buffer[-1][7]
+        elif self.calibration + self.data_buffer[-1][7] <= 0:
+            self.data_buffer[-1][7] = 0
+        else:
+            self.data_buffer[-1][7] = 180
 
     def latest(self):
         date = self.german_tz.localize(datetime.fromisoformat(self.data_buffer[-1][0]))
