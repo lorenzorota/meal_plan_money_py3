@@ -75,7 +75,7 @@ class Transactions_Handler():
             self.data_buffer[i].append(0)
             self.data_buffer[i].append(0)
 
-            # correct the 
+            # correct the raw data into more useful data
             self.data_buffer[i].append(
                 0 if item['amount'] == None else \
                 -1*item['amount'] if item['oldBalance'] == None else item['amount'] 
@@ -98,15 +98,23 @@ class Transactions_Handler():
         for i, item in enumerate(self.data_buffer):
             item[2] = is_servery_trxn = self.is_servery_trxn(i)
             item[3] = is_duplicate = self.is_duplicate(i)
+            # base case: total balance is the added starting amount
             if i == 0:
                 item[7] = item[4]
             elif is_servery_trxn and not is_duplicate:
+                # check that we are not subtracting what we added when maxing out
+                if abs(self.data_buffer[i-1][4]) == 12.66 and item[4] == -12.66:
+                    item[4] = 0
+                # only add value that does not overflow maximum allowance (180)
                 if item[4] + self.data_buffer[i-1][7] <= 180:
                     item[7] = item[4] + self.data_buffer[i-1][7]
+                # if it does not overflow, make sure it does not underflow (0)
                 elif item[4] + self.data_buffer[i-1][7] <= 0:
                     item[7] = 0
+                # if value is ambiguous assume it reached the maximum allowance
                 else:
                     item[7] = 180
+            # copy the total balance from the previous transaction
             else:
                 item[7] = self.data_buffer[i-1][7]
 
